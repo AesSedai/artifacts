@@ -7,7 +7,7 @@ export const CharacterBar = (): JSX.Element => {
     return (
         <Box sx={{ display: "flex", flexDirection: "row" }}>
             {characterNames.map((character) => (
-                <Character name={character}></Character>
+                <Character name={character} key={character}></Character>
             ))}
         </Box>
     )

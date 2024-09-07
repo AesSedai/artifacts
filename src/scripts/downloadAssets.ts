@@ -5,7 +5,7 @@ import path from "node:path"
 
 OpenAPIConfig.BASE = "https://api.artifactsmmo.com"
 
-import { ItemsService, MapSchema, MapsService, MonstersService, ResourcesService } from "../api/artifacts/requests"
+import { ItemsService, MapsService, MonstersService, ResourcesService } from "../api/artifacts/requests"
 import { List } from "ts-toolbelt"
 
 const pageSize = 100
@@ -66,7 +66,7 @@ const allAssets: { [k in assetTypes]: asset<assetMap[k]> } = {
     }
 }
 
-for (let [key, value] of Object.entries(allAssets)) {
+for (const [key, value] of Object.entries(allAssets)) {
     console.log("Beginning fetch for", key)
 
     const outputData: { [k in string]: List.UnionOf<Awaited<ReturnType<typeof value.service>>["data"]> } = {}
@@ -79,7 +79,7 @@ for (let [key, value] of Object.entries(allAssets)) {
         console.log("fetching page", page)
         const response = await value.service({ page: page, size: pageSize })
 
-        for (let result of response.data) {
+        for (const result of response.data) {
             let code = ""
             if ("code" in result) {
                 code = result.code
@@ -99,7 +99,7 @@ for (let [key, value] of Object.entries(allAssets)) {
     }
 
     // after collecting, transform the imageMaps from URLs to b64 strings
-    for (let [code, url] of value.imageMap.entries()) {
+    for (const [code, url] of value.imageMap.entries()) {
         console.log("fetching image for", code)
         const b64 = await getBase64(url)
         outputImages[code] = `data:image/png;base64,${b64}`
@@ -116,7 +116,7 @@ for (let [key, value] of Object.entries(allAssets)) {
 const characters = ["men1", "men2", "men3", "women1", "women2", "women3"]
 
 const outputImages: { [k in string]: string } = {}
-for (let character of characters) {
+for (const character of characters) {
     console.log("fetching image for", character)
     const b64 = await getBase64(`https://artifactsmmo.com/images/characters/${character}.png`)
     outputImages[character] = `data:image/png;base64,${b64}`
